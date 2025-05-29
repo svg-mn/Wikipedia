@@ -1,0 +1,77 @@
+= Superblock (file system) =
+
+In computer file systems, a '''superblock''' is a critical metadata structure that contains information about the file system's layout, size, and status. It is used by the operating system to understand and manage the file system stored on a storage device. Without a valid superblock, the file system cannot be correctly mounted or interpreted.
+
+== Overview ==
+
+The superblock stores global information about the file system, such as:
+
+* File system size and block size
+* Number of allocation groups
+* Metadata locations
+* File system UUID and label
+* Journal configuration (if applicable)
+* Supported features and format version
+
+While the specific structure of a superblock varies between file systems, its role as the "header" of the file system remains consistent.
+
+== XFS Superblock Structure ==
+
+In '''XFS''', the superblock is located at a well-known offset at the beginning of the file system (usually block 0 of AG 0), and additional copies exist at the start of each Allocation Group (AG).
+
+The XFS superblock includes fields such as:
+
+* <code>sb_magicnum</code>: Magic number identifying XFS
+* <code>sb_blocksize</code>: Block size in bytes
+* <code>sb_dblocks</code>: Total number of data blocks
+* <code>sb_agcount</code>: Number of allocation groups
+* <code>sb_uuid</code>: File system UUID
+* <code>sb_logstart</code>: Start block of the journal (log) if internal
+
+This structure is fixed-size and versioned, ensuring compatibility and upgrade paths across kernel versions.
+
+== Location and Redundancy ==
+
+XFS divides its storage into multiple '''allocation groups''' for parallelism and scalability. Each AG contains its own copy of the superblock. This design provides redundancy and allows for localized metadata operations, improving performance on large systems.
+
+Corruption in the primary AG's superblock can sometimes be recovered by referencing the superblock from a different AG. Tools like <code>xfs_repair</code> and <code>xfs_db</code> assist in verifying or rebuilding the superblock when issues are detected.
+
+== Mounting and Recovery ==
+
+When an XFS file system is mounted, the superblock is read to determine critical parameters such as block size, journaling state, and AG structure. If the superblock is unreadable, the mount operation will fail.
+
+The tool <code>xfs_repair</code> can attempt to reconstruct a damaged superblock using redundant copies:
+
+<pre>
+xfs_repair /dev/sdX
+</pre>
+
+Advanced recovery can be performed using <code>xfs_db</code>:
+
+<pre>
+xfs_db /dev/sdX
+xfs_db> sb 0
+xfs_db> p
+</pre>
+
+These tools help inspect or rebuild specific superblocks in alternate AGs.
+
+== Other File Systems with Superblocks ==
+
+* '''ext2''', '''ext3''', '''ext4''' – Redundant superblocks in fixed block groups
+* '''UFS''' (Unix File System) – Single primary superblock with backups
+
+== See also ==
+
+* [[Allocation group]]
+* [[Inode]]
+* [[Filesystem metadata]]
+* [https://man7.org/linux/man-pages/man8/xfs_repair.8.html xfs_repair manual]
+* [[XFS (file system)]]
+
+== References ==
+
+<references />
+
+# XFS Filesystem Structure – Kernel Documentation: https://docs.kernel.org/filesystems/xfs.html
+# Linux man pages: xfs_db, xfs_repair
