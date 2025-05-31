@@ -1,5 +1,3 @@
-= Superblock (file system) =
-
 In computer file systems, a '''superblock''' is a critical metadata structure that contains information about the file system's layout, size, and status. It is used by the operating system to understand and manage the file system stored on a storage device. Without a valid superblock, the file system cannot be correctly mounted or interpreted.
 
 == Overview ==
@@ -17,7 +15,7 @@ While the specific structure of a superblock varies between file systems, its ro
 
 == XFS Superblock Structure ==
 
-In '''XFS''', the superblock is located at a well-known offset at the beginning of the file system (usually block 0 of AG 0), and additional copies exist at the start of each Allocation Group (AG).
+In '''[[XFS]]''', the superblock is located at a well-known offset at the beginning of the file system (usually block 0 of AG 0), and additional copies exist at the start of each Allocation Group (AG).
 
 The XFS superblock includes fields such as:
 
@@ -58,8 +56,8 @@ These tools help inspect or rebuild specific superblocks in alternate AGs.
 
 == Other File Systems with Superblocks ==
 
-* '''ext2''', '''ext3''', '''ext4''' – Redundant superblocks in fixed block groups
-* '''UFS''' (Unix File System) – Single primary superblock with backups
+* '''ext2''', '''ext3''', '''ext4'''<ref>{{Cite web |title=Ext4 Disk Layout - Ext4 |url=https://archive.kernel.org/oldwiki/ext4.wiki.kernel.org/index.php/Ext4_Disk_Layout.html#The_Super_Block |access-date=2025-05-31 |website=archive.kernel.org}}</ref> – Redundant superblocks in fixed block groups
+* '''UFS''' ([[Unix File System]]) – Single primary superblock with backups
 
 == See also ==
 
@@ -72,6 +70,6 @@ These tools help inspect or rebuild specific superblocks in alternate AGs.
 == References ==
 
 <references />
-
-# XFS Filesystem Structure – Kernel Documentation: https://docs.kernel.org/filesystems/xfs/index.html
-# Linux man pages: xfs_db, xfs_repair
+* Super Blocks Structure – Kernel Documentation: https://docs.kernel.org/filesystems/ext4/globals.html
+* XFS Filesystem Structure – Kernel Documentation: https://docs.kernel.org/filesystems/xfs/index.html
+* Linux man pages: xfs_db, xfs_repair
